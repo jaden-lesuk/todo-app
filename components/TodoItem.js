@@ -1,25 +1,28 @@
 import React from 'react';
 import {View, Text, StyleSheet, FlatList, Alert, TouchableOpacity} from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
-import {connect} from 'react-redux';
-import {getTodos} from '../flux/actions/todoActions';
-
-import PropTypes from 'prop-types';
+const iconMap = {
+    "done":"done",
+    "in-progress":"play-arrow",
+    "pending":"new-releases",
+}
 
 class TodoItem extends React.Component {
-    componentDidMount(){
-        this.props.getTodos()
-    }
-    
 
     render(){
-        const {todos} = this.props;
+        const { due_date, name, status } = this.props.todo.item;
+        console.log(this.props.todo)
 
         return(
-            <View style={styles.container}> 
-            </View>
-            
-      )
+            <TouchableOpacity>
+                <View style={styles.container}>
+                    <Text style={styles.text}>{name}</Text>
+                    <Text style={styles.dateText}>{due_date}</Text>
+                    <MaterialIcons name={`${iconMap[status]}`} size={25} color="green" />
+                </View>
+            </TouchableOpacity>
+        )
     }
 }
 
@@ -29,27 +32,27 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: "#280000",
+        backgroundColor: "#ffffff",
         marginBottom: 5,
-        borderRadius: 20,
+        borderRadius: 5,
+        borderColor: '#dbdbdb',
+        borderWidth: 1,
         padding: 10,
         paddingLeft: 20,
         paddingRight: 20
     },
     text: {
         fontSize: 20,
-        color: 'white'
+        color: '#717171'
     },
+
+    dateText: {
+        fontSize: 15,
+        color: '#717171',
+        textDecorationLine: 'underline'
+    }
 })
 
-TodoItem.propTypes = {
-    todo: PropTypes.object.isRequired,
-    getTodos: PropTypes.func.isRequired
-}
-
-const mapStateToProps = (state) => {
-    const {todos} = state
-}
 
 
-export default connect(mapStateToProps, {getTodos})(TodoItem);
+export default TodoItem;
